@@ -76,8 +76,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         let average = sum / dataArray.length;
         
-        // Threshold for blowing: increased so user has to blow harder
-        if (average > 110) {
+        // Threshold for blowing: increased significantly so user has to really blow
+        if (average > 150) {
             isBlowing = true;
             blowOutCandles();
             return;
@@ -108,6 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
             instructionText.classList.add("hidden");
             successText.classList.remove("hidden");
+            document.getElementById("main-title").classList.add("reveal"); // Show the Happy Birthday text
             
             // Play Happy Birthday Song
             bdaySong.play().catch(e => console.log('Final audio play blocked', e));

@@ -99,10 +99,14 @@ body {
 /* Typography */
 .clay-title {
     text-align: center;
-    display: flex;
+    display: none;
     flex-direction: column;
     line-height: 1.1;
     /* Removed collective bounceIn animation */
+}
+
+.clay-title.reveal {
+    display: flex;
 }
 
 .clay-title .happy {

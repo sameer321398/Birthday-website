@@ -107,7 +107,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // Show success & party!
         setTimeout(() => {
             instructionText.classList.add("hidden");
-            document.querySelector(".flavor-picker").classList.add("hidden"); // Hide flavors
             successText.classList.remove("hidden");
             
             // Play Happy Birthday Song
@@ -143,24 +142,4 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }());
     }
-
-    // --- Flavor Picker Logic ---
-    const flavorBtns = document.querySelectorAll(".flavor-btn");
-    const flavorDisplay = document.getElementById("flavor-display");
-    const flavorNames = {
-        "strawberry": "Strawberry",
-        "chocolate": "Chocolate",
-        "vanilla": "Vanilla Bean",
-        "blueberry": "Blueberry"
-    };
-
-    flavorBtns.forEach(btn => {
-        btn.addEventListener("click", () => {
-            flavorBtns.forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-            const flavor = btn.dataset.flavor;
-            document.body.className = "flavor-" + flavor;
-            if(flavorDisplay) flavorDisplay.innerText = flavorNames[flavor];
-        });
-    });
 });

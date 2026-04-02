@@ -35,27 +35,8 @@ body {
     justify-content: center;
     align-items: center;
     overflow-x: hidden;
-    color: var(--text-primary);
-}
-
-/* Flavor Themes */
-body.flavor-chocolate {
-    --cake-bottom: #5C4033; --cake-bottom-2: #6A4430;
-    --cake-mid: #8B5A2B; --cake-mid-2: #8F654D;
-    --cake-top: #A0522D; --cake-top-2: #B08569;
-    --frosting: #FFF8E7; /* Cream */
-}
-body.flavor-vanilla {
-    --cake-bottom: #FFF59D; --cake-bottom-2: #FFF176;
-    --cake-mid: #FFF9C4; --cake-mid-2: #FFF59D;
-    --cake-top: #FEFBEA; --cake-top-2: #FFF9C4;
-    --frosting: #FFFFFF;
-}
-body.flavor-blueberry {
-    --cake-bottom: #B1B2FF; --cake-bottom-2: #AAC4FF;
-    --cake-mid: #D2DAFF; --cake-mid-2: #B1B2FF;
-    --cake-top: #EEF1FF; --cake-top-2: #D2DAFF;
-    --frosting: #F4F6FF;
+    --btn-bg: #FF477E;
+    --btn-hover: #FB3670;
 }
 
 .wrapper {
@@ -401,30 +382,6 @@ body.flavor-blueberry {
         10px 10px 20px var(--clay-shadow-out-dark),
         -10px -10px 20px var(--clay-shadow-out-light);
     animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.flavor-picker {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    padding: 0.8rem 1.5rem;
-}
-.flavor-selector {
-    display: flex;
-    gap: 15px;
-}
-.flavor-btn {
-    width: 30px; height: 30px;
-    border-radius: 50%;
-    border: 3px solid #fff;
-    cursor: pointer;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-    transition: transform 0.3s;
-}
-.flavor-btn.active, .flavor-btn:hover {
-    transform: scale(1.2);
-    border-color: var(--text-primary);
 }
 
 .hidden {

@@ -20,10 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
         } 
     }).then(stream => {
         globalMicStream = stream;
-        document.getElementById("mic-overlay").classList.add("hidden"); // Remove blocking overlay
     }).catch(err => {
         console.error("Microphone access denied:", err);
-        document.querySelector("#mic-overlay .clay-bubble").innerHTML = "<h2 style='color: #FF477E;'>Action Required 🎂</h2><p>Priya, you must allow microphone access in your browser settings to blow out the candles! Refresh when done.</p>";
+        alert("Priya, please allow microphone access in your browser to blow out the candles!");
     });
 
     // Preload reliable MP3 from Internet Archive

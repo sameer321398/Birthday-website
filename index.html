@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Priya!</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="bg-blobs">
+        <div class="blob-1"></div>
+        <div class="blob-2"></div>
+        <div class="blob-3"></div>
+    </div>
+    
+    <!-- Background Music -->
+    <audio id="bg-music" loop>
+        <source src="majboor.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="wrapper">
+        <h1 class="clay-title">
+            <span class="happy">Happy</span>
+            <span class="birthday">Birthday</span>
+            <span class="name">Priya!</span>
+        </h1>
+        
+        <div class="scene">
+            <div class="cake-container">
+                <!-- Sparkles -->
+                <div class="sparkle sparkle-1">✨</div>
+                <div class="sparkle sparkle-2">✨</div>
+                <div class="sparkle sparkle-3">✨</div>
+                
+                <div class="cake-layer tier-1 clay-obj">
+                    <div class="drip-container">
+                        <div class="drip drip-1"></div>
+                        <div class="drip drip-2"></div>
+                        <div class="drip drip-3"></div>
+                        <div class="drip drip-4"></div>
+                        <div class="drip drip-5"></div>
+                    </div>
+                </div>
+                <div class="cake-layer tier-2 clay-obj">
+                    <div class="dots">
+                        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                    </div>
+                </div>
+                <div class="cake-layer tier-3 clay-obj">
+                    <div class="candles">
+                        <div class="candle clay-obj-small">
+                            <div class="flame off"></div>
+                        </div>
+                        <div class="candle clay-obj-small center-candle">
+                            <div class="flame off"></div>
+                        </div>
+                        <div class="candle clay-obj-small">
+                            <div class="flame off"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="plate clay-obj-plate"></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="light-candles" class="clay-button">Light the Candles 🎉</button>
+            <div id="instruction-text" class="hidden clay-bubble">
+                <p>🌬️ Blow into your microphone to make a wish!</p>
+            </div>
+            <div id="success-text" class="hidden clay-bubble success">
+                <p>🎂 Yay! Happy Birthday Priya! 💖</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

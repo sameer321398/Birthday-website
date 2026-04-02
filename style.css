@@ -162,10 +162,10 @@ body {
 .scene {
     position: relative;
     width: 100%;
-    height: 380px;
     display: flex;
     justify-content: center;
     align-items: flex-end;
+    margin-top: 3rem; /* Space for candles to stick out cleanly */
     padding-bottom: 30px;
 }
 
@@ -467,7 +467,7 @@ body {
     .clay-title .birthday { font-size: 2.6rem; margin-top: 5px; }
     .clay-title .name { font-size: 3.8rem; margin-top: 5px; }
     
-    .scene { height: 280px; }
+    .scene { height: auto; margin-top: 2rem; }
     .cake-container { --scale: 0.75; }
 }
 
@@ -480,7 +480,7 @@ body {
     .clay-title .birthday { font-size: 2.2rem; margin-top: 5px; }
     .clay-title .name { font-size: 3.2rem; margin-top: 5px; }
     
-    .scene { height: 250px; }
+    .scene { height: auto; margin-top: 1.5rem; }
     .cake-container { --scale: 0.6; }
     
     .clay-button { padding: 1rem 2rem; font-size: 1rem; }

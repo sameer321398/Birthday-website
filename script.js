@@ -147,11 +147,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- Flavor Picker Logic ---
     const flavorBtns = document.querySelectorAll(".flavor-btn");
+    const flavorDisplay = document.getElementById("flavor-display");
+    const flavorNames = {
+        "strawberry": "Strawberry",
+        "chocolate": "Chocolate",
+        "vanilla": "Vanilla Bean",
+        "blueberry": "Blueberry"
+    };
+
     flavorBtns.forEach(btn => {
         btn.addEventListener("click", () => {
             flavorBtns.forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
-            document.body.className = "flavor-" + btn.dataset.flavor;
+            const flavor = btn.dataset.flavor;
+            document.body.className = "flavor-" + flavor;
+            if(flavorDisplay) flavorDisplay.innerText = flavorNames[flavor];
         });
     });
 

@@ -464,17 +464,18 @@ body.flavor-blueberry {
 
 .shooting-star {
     position: fixed;
-    bottom: 20%;
-    left: -20%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     color: #fff;
     font-family: 'Dancing Script', cursive;
     font-size: 3.5rem;
     font-weight: bold;
+    text-align: center;
     text-shadow: 0 0 10px #FFD166, 0 0 20px #FFD166, 0 0 30px #FF477E;
-    white-space: nowrap;
     z-index: 1000;
     pointer-events: none;
-    animation: flyStar 3s ease-in forwards;
+    animation: floatLantern 4s ease-in-out forwards;
 }
 
 .hidden {
@@ -482,9 +483,11 @@ body.flavor-blueberry {
 }
 
 /* Animations */
-@keyframes flyStar {
-    0% { transform: translate(0, 0) scale(1) rotate(-15deg); opacity: 1; }
-    100% { transform: translate(140vw, -100vh) scale(0.6) rotate(-15deg); opacity: 0; }
+@keyframes floatLantern {
+    0% { opacity: 0; transform: translate(-50%, -30%) scale(0.8); }
+    20% { opacity: 1; transform: translate(-50%, -40%) scale(1.1); text-shadow: 0 0 20px #FFF, 0 0 40px #FFD166, 0 0 60px #FF477E; }
+    80% { opacity: 1; transform: translate(-50%, -80%) scale(1); text-shadow: 0 0 10px #FFF, 0 0 20px #FFD166; }
+    100% { opacity: 0; transform: translate(-50%, -100%) scale(0.9); }
 }
 @keyframes flicker {
     0% { transform: translateX(-50%) rotate(-3deg) scale(0.9); }

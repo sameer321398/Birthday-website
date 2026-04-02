@@ -427,68 +427,11 @@ body.flavor-blueberry {
     border-color: var(--text-primary);
 }
 
-#wish-catcher {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-}
-.clay-input {
-    width: 100%;
-    padding: 1rem 1.5rem;
-    border: none;
-    border-radius: 25px;
-    font-family: inherit;
-    font-size: 1.1rem;
-    color: #555;
-    outline: none;
-    box-shadow: 
-        inset 5px 5px 10px rgba(0,0,0,0.05),
-        inset -5px -5px 10px rgba(255,255,255,0.8);
-    background: var(--clay-bg);
-}
-.clay-button-small {
-    padding: 0.8rem 1.8rem;
-    background: #a18cd1;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 5px 5px 15px rgba(161, 140, 209, 0.4), -5px -5px 15px rgba(255,255,255,1);
-    transition: 0.3s;
-}
-.clay-button-small:hover { transform: translateY(-2px); background: #b299e5; }
-.clay-button-small:active { transform: translateY(2px); }
-
-.shooting-star {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #fff;
-    font-family: 'Dancing Script', cursive;
-    font-size: 3.5rem;
-    font-weight: bold;
-    text-align: center;
-    text-shadow: 0 0 10px #FFD166, 0 0 20px #FFD166, 0 0 30px #FF477E;
-    z-index: 1000;
-    pointer-events: none;
-    animation: floatLantern 4s ease-in-out forwards;
-}
-
 .hidden {
     display: none !important;
 }
 
 /* Animations */
-@keyframes floatLantern {
-    0% { opacity: 0; transform: translate(-50%, -30%) scale(0.8); }
-    20% { opacity: 1; transform: translate(-50%, -40%) scale(1.1); text-shadow: 0 0 20px #FFF, 0 0 40px #FFD166, 0 0 60px #FF477E; }
-    80% { opacity: 1; transform: translate(-50%, -80%) scale(1); text-shadow: 0 0 10px #FFF, 0 0 20px #FFD166; }
-    100% { opacity: 0; transform: translate(-50%, -100%) scale(0.9); }
-}
 @keyframes flicker {
     0% { transform: translateX(-50%) rotate(-3deg) scale(0.9); }
     100% { transform: translateX(-50%) rotate(3deg) scale(1.1); }

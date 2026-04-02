@@ -76,8 +76,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         let average = sum / dataArray.length;
         
-        // Threshold for blowing
-        if (average > 75) {
+        // Threshold for blowing: increased so user has to blow harder
+        if (average > 110) {
             isBlowing = true;
             blowOutCandles();
             return;
@@ -109,7 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
             instructionText.classList.add("hidden");
             document.querySelector(".flavor-picker").classList.add("hidden"); // Hide flavors
             successText.classList.remove("hidden");
-            document.getElementById("wish-catcher").classList.remove("hidden"); // Show wish input
             
             // Play Happy Birthday Song
             bdaySong.play().catch(e => console.log('Final audio play blocked', e));
@@ -163,27 +162,5 @@ document.addEventListener("DOMContentLoaded", () => {
             document.body.className = "flavor-" + flavor;
             if(flavorDisplay) flavorDisplay.innerText = flavorNames[flavor];
         });
-    });
-
-    // --- Shooting Star Wish Logic ---
-    const wishBtn = document.getElementById("send-wish");
-    const wishInput = document.getElementById("wish-input");
-
-    wishBtn.addEventListener("click", () => {
-        if(!wishInput.value.trim()) return;
-        
-        // Create shooting star element
-        const star = document.createElement("div");
-        star.className = "shooting-star";
-        star.innerText = wishInput.value;
-        document.body.appendChild(star);
-        
-        // Update UI
-        wishInput.style.display = "none";
-        wishBtn.style.display = "none";
-        document.getElementById("wish-catcher").innerHTML = "<p class='clay-bubble success'>Your wish is flying to the stars! 🌠</p>";
-        
-        // Remove element after animation finishes
-        setTimeout(() => star.remove(), 3000);
     });
 });

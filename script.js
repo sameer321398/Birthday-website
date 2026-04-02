@@ -9,7 +9,23 @@ document.addEventListener("DOMContentLoaded", () => {
     let microphone;
     let isBlowing = false;
     let blownOut = false;
+    let globalMicStream = null;
     
+    // Request microphone access immediately on page load
+    navigator.mediaDevices.getUserMedia({ 
+        audio: {
+            echoCancellation: false,
+            autoGainControl: false,
+            noiseSuppression: false
+        } 
+    }).then(stream => {
+        globalMicStream = stream;
+        document.getElementById("mic-overlay").classList.add("hidden"); // Remove blocking overlay
+    }).catch(err => {
+        console.error("Microphone access denied:", err);
+        document.querySelector("#mic-overlay .clay-bubble").innerHTML = "<h2 style='color: #FF477E;'>Action Required 🎂</h2><p>Priya, you must allow microphone access in your browser settings to blow out the candles! Refresh when done.</p>";
+    });
+
     // Preload reliable MP3 from Internet Archive
     const bdaySong = new Audio('https://ia800109.us.archive.org/30/items/HappyBirthdayToYou_201708/Happy_Birthday_To_You.mp3');
     bdaySong.volume = 0.8;
@@ -17,19 +33,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Background Music Auto-play Logic
     const bgMusic = document.getElementById("bg-music");
     bgMusic.volume = 0.5; // Turn up slightly
-    
-    // Modern browsers require interaction, so we start it on any tap
-    const playBg = () => {
-        bgMusic.play().catch(e => console.log(e));
-        document.body.removeEventListener('click', playBg);
-        document.body.removeEventListener('touchstart', playBg);
-    };
-    document.body.addEventListener('click', playBg);
-    document.body.addEventListener('touchstart', playBg);
 
     lightBtn.addEventListener("click", async () => {
         try {
-            // Ensure background music plays if they click the button first
+            // Un-mute and start background music from button (ensures interaction policy works)
             bgMusic.play().catch(e => console.log(e));
 
             // Unlock audio for later
@@ -37,14 +44,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 bdaySong.pause();
                 bdaySong.currentTime = 0;
             }).catch(e => console.log('Audio init error:', e));
-            // Request microphone access
-            const stream = await navigator.mediaDevices.getUserMedia({ 
-                audio: {
-                    echoCancellation: false,
-                    autoGainControl: false,
-                    noiseSuppression: false
-                } 
-            });
+            
+            if (!globalMicStream) {
+                alert("Microphone stream not ready! Please allow access.");
+                return;
+            }
             
             // Audio Context setup
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -52,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
             analyser.fftSize = 512;
             analyser.smoothingTimeConstant = 0.4;
             
-            microphone = audioContext.createMediaStreamSource(stream);
+            microphone = audioContext.createMediaStreamSource(globalMicStream);
             microphone.connect(analyser);
             
             // UI Updates
@@ -121,8 +125,8 @@ document.addEventListener("DOMContentLoaded", () => {
             successText.classList.remove("hidden");
             document.getElementById("main-title").classList.add("reveal"); // Show the Happy Birthday text
             
-            // Play Happy Birthday Song
-            bgMusic.pause(); // Pause ambient track
+            // Play Happy Birthday Song! (bgMusic continues playing in background)
+            // (Removed bgMusic.pause() as requested to keep song going)
             bdaySong.play().catch(e => console.log('Final audio play blocked', e));
 
             triggerConfetti();

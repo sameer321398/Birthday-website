@@ -14,12 +14,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const bdaySong = new Audio('https://ia800109.us.archive.org/30/items/HappyBirthdayToYou_201708/Happy_Birthday_To_You.mp3');
     bdaySong.volume = 0.8;
 
+    // Background Music Auto-play Logic
+    const bgMusic = document.getElementById("bg-music");
+    bgMusic.volume = 0.5; // Turn up slightly
+    
+    // Modern browsers require interaction, so we start it on any tap
+    const playBg = () => {
+        bgMusic.play().catch(e => console.log(e));
+        document.body.removeEventListener('click', playBg);
+        document.body.removeEventListener('touchstart', playBg);
+    };
+    document.body.addEventListener('click', playBg);
+    document.body.addEventListener('touchstart', playBg);
+
     lightBtn.addEventListener("click", async () => {
         try {
-            // Start background music
-            const bgMusic = document.getElementById("bg-music");
-            bgMusic.volume = 0.3; // keep it soft so it doesn't overpower
-            bgMusic.play().catch(e => console.log('BG music play blocked or missing majboor.mp3 file', e));
+            // Ensure background music plays if they click the button first
+            bgMusic.play().catch(e => console.log(e));
 
             // Unlock audio for later
             bdaySong.play().then(() => {
@@ -111,6 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("main-title").classList.add("reveal"); // Show the Happy Birthday text
             
             // Play Happy Birthday Song
+            bgMusic.pause(); // Pause ambient track
             bdaySong.play().catch(e => console.log('Final audio play blocked', e));
 
             triggerConfetti();

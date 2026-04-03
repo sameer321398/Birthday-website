@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // Request microphone access inside a user gesture (Fixes iOS/Android permissions not popping up)
             const stream = await navigator.mediaDevices.getUserMedia({ 
                 audio: {
-                    echoCancellation: false,
+                    echoCancellation: true,
                     autoGainControl: false,
                     noiseSuppression: false
                 } 

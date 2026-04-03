@@ -22,16 +22,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     lightBtn.addEventListener("click", async () => {
         try {
-            // Un-mute and start background music from button interaction
-            bgMusic.play().catch(e => console.log("Bg audio auto-play prevented:", e));
-
-            // Unlock bday song audio for later (iOS Safari fix)
+            // Unlock all audio elements synchronously to appease Safari autoplay policies
+            bgMusic.play().then(() => bgMusic.pause()).catch(e => console.log(e));
             bdaySong.play().then(() => {
                 bdaySong.pause();
                 bdaySong.currentTime = 0;
             }).catch(e => console.log('Bday audio init error:', e));
 
-            // Request microphone access inside a user gesture (Fixes iOS/Android permissions not popping up)
+            // Request microphone access FIRST so the OS can switch audio routes quietly
+            // This prevents the music from stuttering while the device transitions IO hardware
             const stream = await navigator.mediaDevices.getUserMedia({ 
                 audio: {
                     echoCancellation: true,
@@ -39,6 +38,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     noiseSuppression: false
                 } 
             });
+
+            // Now that the mic audio route is open and stable, start background music seamlessly
+            bgMusic.play().catch(e => console.log("Bg audio auto-play prevented:", e));
             
             // Audio Context setup
             const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -111,13 +113,17 @@ document.addEventListener("DOMContentLoaded", () => {
     function blowOutCandles() {
         blownOut = true;
         
-        // Stop microphone tracks cleanly
-        if (microphone && microphone.mediaStream) {
-            microphone.mediaStream.getTracks().forEach(track => track.stop());
-        }
-        if (audioContext && audioContext.state !== "closed") {
-            audioContext.close();
-        }
+        // Let the microphone stream remain open temporarily so we don't 
+        // aggressively switch audio routes and stutter the climax song.
+        // We gracefully close it after 30 seconds when the party winds down.
+        setTimeout(() => {
+            if (microphone && microphone.mediaStream) {
+                microphone.mediaStream.getTracks().forEach(track => track.stop());
+            }
+            if (audioContext && audioContext.state !== "closed") {
+                audioContext.close();
+            }
+        }, 30000);
 
         // Blow out flames
         flames.forEach((flame, index) => {

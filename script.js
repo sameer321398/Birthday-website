@@ -82,16 +82,17 @@ document.addEventListener("DOMContentLoaded", () => {
         analyser.getByteFrequencyData(dataArray);
         
         let sum = 0;
-        // We only analyze the lowest frequencies (first 30 bins) 
-        // to specifically identify blowing/wind sound
-        const binsToAnalyze = 30;
-        for (let i = 0; i < binsToAnalyze; i++) {
+        // We analyze the lower frequencies but skip the very first few bins (0-4) 
+        // to prevent DC offset/electronic noise from triggering it automatically.
+        const startBin = 5;
+        const endBin = 35;
+        for (let i = startBin; i < endBin; i++) {
             sum += dataArray[i];
         }
-        let average = sum / binsToAnalyze;
+        let average = sum / (endBin - startBin);
         
-        // Threshold for blowing: requires sustained loud low-frequency noise
-        if (average > 150) { 
+        // Threshold for blowing: increased to 160 as requested
+        if (average > 160) { 
             blowCount++;
         } else {
             blowCount = Math.max(0, blowCount - 1);

@@ -9,54 +9,51 @@ document.addEventListener("DOMContentLoaded", () => {
     let microphone;
     let isBlowing = false;
     let blownOut = false;
-    let globalMicStream = null;
-    
-    // Request microphone access immediately on page load
-    navigator.mediaDevices.getUserMedia({ 
-        audio: {
-            echoCancellation: false,
-            autoGainControl: false,
-            noiseSuppression: false
-        } 
-    }).then(stream => {
-        globalMicStream = stream;
-    }).catch(err => {
-        console.error("Microphone access denied:", err);
-        alert("Priya, please allow microphone access in your browser to blow out the candles!");
-    });
+    let blowCount = 0;
 
     // Preload reliable MP3 from Internet Archive
     const bdaySong = new Audio('https://ia800109.us.archive.org/30/items/HappyBirthdayToYou_201708/Happy_Birthday_To_You.mp3');
     bdaySong.volume = 0.8;
+    bdaySong.preload = "auto";
 
     // Background Music Auto-play Logic
     const bgMusic = document.getElementById("bg-music");
-    bgMusic.volume = 0.5; // Turn up slightly
+    bgMusic.volume = 0.5;
 
     lightBtn.addEventListener("click", async () => {
         try {
-            // Un-mute and start background music from button (ensures interaction policy works)
-            bgMusic.play().catch(e => console.log(e));
+            // Un-mute and start background music from button interaction
+            bgMusic.play().catch(e => console.log("Bg audio auto-play prevented:", e));
 
-            // Unlock audio for later
+            // Unlock bday song audio for later (iOS Safari fix)
             bdaySong.play().then(() => {
                 bdaySong.pause();
                 bdaySong.currentTime = 0;
-            }).catch(e => console.log('Audio init error:', e));
-            
-            if (!globalMicStream) {
-                alert("Microphone stream not ready! Please allow access.");
-                return;
-            }
+            }).catch(e => console.log('Bday audio init error:', e));
+
+            // Request microphone access inside a user gesture (Fixes iOS/Android permissions not popping up)
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+                audio: {
+                    echoCancellation: false,
+                    autoGainControl: false,
+                    noiseSuppression: false
+                } 
+            });
             
             // Audio Context setup
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioContext = new AudioContext();
+            
+            if (audioContext.state === 'suspended') {
+                await audioContext.resume();
+            }
+
             analyser = audioContext.createAnalyser();
             analyser.fftSize = 512;
             analyser.smoothingTimeConstant = 0.4;
             
-            microphone = audioContext.createMediaStreamSource(globalMicStream);
-            microphone.connect(analyser);
+            microphone = audioContext.createMediaStreamSource(stream);
+            microphone.connect(analyser); // We do not connect to destination to avoid echo
             
             // UI Updates
             lightBtn.classList.add("hidden");
@@ -85,13 +82,23 @@ document.addEventListener("DOMContentLoaded", () => {
         analyser.getByteFrequencyData(dataArray);
         
         let sum = 0;
-        for (let i = 0; i < dataArray.length; i++) {
+        // We only analyze the lowest frequencies (first 30 bins) 
+        // to specifically identify blowing/wind sound
+        const binsToAnalyze = 30;
+        for (let i = 0; i < binsToAnalyze; i++) {
             sum += dataArray[i];
         }
-        let average = sum / dataArray.length;
+        let average = sum / binsToAnalyze;
         
-        // Threshold for blowing: increased significantly so user has to really blow
-        if (average > 150) {
+        // Threshold for blowing: requires sustained loud low-frequency noise
+        if (average > 150) { 
+            blowCount++;
+        } else {
+            blowCount = Math.max(0, blowCount - 1);
+        }
+
+        // Needs to be sustained over ~8 frames (approx 130ms) to prevent false triggers
+        if (blowCount > 8) {
             isBlowing = true;
             blowOutCandles();
             return;
@@ -103,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function blowOutCandles() {
         blownOut = true;
         
-        // Stop microphone tracks
+        // Stop microphone tracks cleanly
         if (microphone && microphone.mediaStream) {
             microphone.mediaStream.getTracks().forEach(track => track.stop());
         }
@@ -125,8 +132,9 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("main-title").classList.add("reveal"); // Show the Happy Birthday text
             
             // Play Happy Birthday Song! (bgMusic continues playing in background)
-            // (Removed bgMusic.pause() as requested to keep song going)
-            bdaySong.play().catch(e => console.log('Final audio play blocked', e));
+            if (bdaySong.paused) {
+                bdaySong.play().catch(e => console.log('Final audio play blocked', e));
+            }
 
             triggerConfetti();
         }, 800);
